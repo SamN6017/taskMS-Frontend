@@ -1,8 +1,7 @@
-import { loginApi } from "../api/authApi";
+import { loginApi,registerApi } from "../api/Authapi";
 
 export async function login(username, password) {
   const data = await loginApi(username, password);
-
   const token = data.token;
 
   if (!token) {
@@ -10,4 +9,8 @@ export async function login(username, password) {
   }
 
   localStorage.setItem("token", token);
+}
+
+export async function register(username, email, password) {
+  await registerApi(username, email, password);
 }

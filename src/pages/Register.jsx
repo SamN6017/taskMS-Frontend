@@ -1,33 +1,45 @@
 import { useState } from "react";
-import { login } from "../services/authservice";
+import { register } from "../services/authservice";
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     try {
-      await login(username, password);
-      alert("Login successful");
+      await register(username, email, password);
+      setSuccess("Registration successful. Please login.");
     } catch (err) {
-      setError("Invalid username or password");
+      setError("Registration failed");
     }
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Register</h2>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleRegister}>
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+
+        <br /><br />
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <br /><br />
@@ -41,12 +53,13 @@ function Login() {
 
         <br /><br />
 
-        <button type="submit">Login</button>
+        <button type="submit">Register</button>
       </form>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p style={{ color: "green" }}>{success}</p>}
     </div>
   );
 }
 
-export default Login;
+export default Register;
