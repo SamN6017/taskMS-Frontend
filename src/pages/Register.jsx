@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { register } from "../services/authservice";
+import { Link } from "react-router-dom";
+
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -24,7 +26,9 @@ function Register() {
   return (
     <div>
       <h2>Register</h2>
-
+        <p>
+        Already registered? <Link to="/login">Login</Link>
+        </p>
       <form onSubmit={handleRegister}>
         <input
           type="text"

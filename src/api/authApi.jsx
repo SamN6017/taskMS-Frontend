@@ -1,32 +1,20 @@
-export async function loginApi(username, password) {
-  const response = await fetch("http://localhost:8080/auth/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
+import api from "./axios";
+
+export async function loginApi(email, password) {
+  const response = await api.post("/api/auth/login", {
+    email,
+    password,
   });
 
-  if (!response.ok) {
-    throw new Error("Login failed");
-  }
-
-  return response.json();
+  return response.data;
 }
 
-export async function registerApi(username, email, password) {
-  const response = await fetch("http://localhost:8080/auth/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, email, password }),
+export async function registerApi(name, email, password) {
+  const response = await api.post("/api/users/register", {
+    name,
+    email,
+    password,
   });
 
-  if (!response.ok) {
-    throw new Error("Registration failed");
-  }
-
-  return response.json();
+  return response.data;
 }
-

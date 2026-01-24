@@ -1,10 +1,28 @@
+import { useEffect, useState } from "react";
+import { getProfile } from "../services/userService";
+
 function Profile() {
-  // fake user data for now
-  const user = {
-    name: "Sam",
-    email: "sam@gmail.com",
-    role: "USER",
-  };
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const data = await getProfile();
+        setUser(data);
+      } catch (err) {
+        setError("Failed to load profile");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProfile();
+  }, []);
+
+  if (loading) return <p>Loading profile...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div>
