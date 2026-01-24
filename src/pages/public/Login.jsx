@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { login } from "../services/authservice";
+import { login } from "../../services/authservice";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -13,10 +13,10 @@ function Login() {
   setError("");
 
   try {
-    await login(username, password);
+    await login(email, password);
     navigate("/profile");
   } catch (err) {
-    setError("Invalid username or password");
+    setError("Invalid email or password");
   }
 };
 
@@ -28,10 +28,10 @@ function Login() {
       </p>
       <form onSubmit={handleLogin}>
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <br /><br />

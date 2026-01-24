@@ -1,20 +1,18 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile";
-import Tasks from "./pages/Tasks";
-import Projects from "./pages/Projects";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/public/Login";
+import RegisterCompany from "./pages/public/RegisterCompany";
+import Profile from "./pages/common/Profile";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" />} />
-
+      {/* Public */}
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/register-company" element={<RegisterCompany />} />
 
+      {/* Protected */}
       <Route
         path="/profile"
         element={
@@ -24,23 +22,8 @@ function App() {
         }
       />
 
-      <Route
-        path="/tasks"
-        element={
-          <ProtectedRoute>
-            <Tasks />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/projects"
-        element={
-          <ProtectedRoute>
-            <Projects />
-          </ProtectedRoute>
-        }
-      />
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
 }

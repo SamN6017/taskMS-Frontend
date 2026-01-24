@@ -1,16 +1,20 @@
-import { loginApi,registerApi } from "../api/Authapi";
+import { loginApi, registerCompanyApi } from "../api/Authapi";
 
-export async function login(username, password) {
-  const data = await loginApi(username, password);
-  const token = data.token;
+export async function registerCompany(data) {
+  return await registerCompanyApi(data);
+}
+
+export async function login(email, password) {
+  // Wrap them in an object so the backend receives JSON keys "email" and "password"
+  const response = await loginApi({ email, password }); 
+  
+  // Note: Your Postman output shows the key is "token", not "jwt"
+  const token = response.data.token; 
 
   if (!token) {
-    throw new Error("Token missing");
+    throw new Error("Token missing from server response");
   }
 
   localStorage.setItem("token", token);
-}
-
-export async function register(username, email, password) {
-  await registerApi(username, email, password);
+  return response.data;
 }
