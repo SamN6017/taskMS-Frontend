@@ -4,17 +4,18 @@ export async function registerCompany(data) {
   return await registerCompanyApi(data);
 }
 
+// src/services/authService.jsx
 export async function login(email, password) {
-  // Wrap them in an object so the backend receives JSON keys "email" and "password"
-  const response = await loginApi({ email, password }); 
+  const response = await loginApi(email, password); 
   
-  // Note: Your Postman output shows the key is "token", not "jwt"
+  // Verify if the token is inside response.data.token
   const token = response.data.token; 
 
-  if (!token) {
-    throw new Error("Token missing from server response");
+  if (token) {
+    localStorage.setItem("token", token);
+    console.log("Token successfully saved!");
+    return response.data;
+  } else {
+    throw new Error("No token received");
   }
-
-  localStorage.setItem("token", token);
-  return response.data;
 }

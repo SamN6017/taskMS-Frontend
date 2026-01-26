@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProfile } from "../../services/userService";
+import { getCurrentUser } from "../../services/userService";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -9,7 +9,7 @@ function Profile() {
   useEffect(() => {
     async function loadProfile() {
       try {
-        const data = await getProfile();
+        const data = await getCurrentUser();
         setUser(data);
       } catch (err) {
         setError("Failed to load profile");

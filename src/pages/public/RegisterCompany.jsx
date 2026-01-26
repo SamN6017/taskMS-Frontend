@@ -36,54 +36,80 @@ function RegisterCompany() {
       setLoading(false);
     }
   }
-console.log("Current Form Data:", formData);
+
   return (
-    <div>
-      <h2>Create Your Company</h2>
+    <div style={styles.container}>
+      <form onSubmit={handleSubmit} style={styles.card}>
+        <h2>Create Your Company</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={styles.error}>{error}</p>}
 
-    <form onSubmit={handleSubmit}>
-    <input
-        name="companyName" // Matches state key
-        placeholder="Company Name"
-        value={formData.companyName}
-        onChange={handleChange}
-        required
-    />
+        <input
+          name="companyName"
+          placeholder="Company Name"
+          value={formData.companyName}
+          onChange={handleChange}
+          required
+        />
 
-  <input
-    name="adminName" // Changed from "name" to match state
-    placeholder="Admin Name"
-    value={formData.adminName}
-    onChange={handleChange}
-    required
-  />
+        <input
+          name="adminName"
+          placeholder="Admin Name"
+          value={formData.adminName}
+          onChange={handleChange}
+          required
+        />
 
-  <input
-    name="adminEmail" // Changed from "email" to match state
-    type="email"
-    placeholder="Admin Email"
-    value={formData.adminEmail}
-    onChange={handleChange}
-    required
-  />
+        <input
+          name="adminEmail"
+          type="email"
+          placeholder="Admin Email"
+          value={formData.adminEmail}
+          onChange={handleChange}
+          required
+        />
 
-  <input
-    name="adminPassword" // Changed from "password" to match state
-    type="password"
-    placeholder="Password"
-    value={formData.adminPassword}
-    onChange={handleChange}
-    required
-  />
+        <input
+          name="adminPassword"
+          type="password"
+          placeholder="Password"
+          value={formData.adminPassword}
+          onChange={handleChange}
+          required
+        />
 
-    <button type="submit" disabled={loading}>
-        {loading ? "Creating..." : "Create Company"}
-    </button>
-    </form>
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Create Company"}
+        </button>
+      </form>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: "90vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  card: {
+    width: "380px",
+    padding: "2rem",
+    borderRadius: "10px",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.12)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem"
+  },
+  subtitle: {
+    fontSize: "0.9rem",
+    color: "#555"
+  },
+  error: {
+    color: "red",
+    fontSize: "0.9rem"
+  }
+};
 
 export default RegisterCompany;

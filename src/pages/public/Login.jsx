@@ -1,56 +1,85 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { login } from "../../services/authservice";
+import { login } from "../../services/authService";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-  e.preventDefault();
-  setError("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
 
-  try {
-    await login(email, password);
-    navigate("/profile");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await login(formData.email, formData.password); // This now returns response.data
+
+      // Ensure you are checking for the EXACT string from the backend
+    if (data.role === "ROLE_TEAM_MEMBER" || data.role === "ROLE_ADMIN") {
+      navigate("/profile"); 
+    }
   } catch (err) {
-    setError("Invalid email or password");
+    console.error("Navigation failed:", err);
+    setError("Login successful, but navigation failed.");
   }
 };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <p>
-        Don’t have an account? <Link to="/register">Register</Link>
-      </p>
-      <form onSubmit={handleLogin}>
+    <div style={styles.container}>
+      <form onSubmit={handleSubmit} style={styles.card}>
+        <h2>Login</h2>
+
+        {error && <p style={styles.error}>{error}</p>}
+
         <input
           type="email"
-          placeholder="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
         />
-
-        <br /><br />
 
         <input
           type="password"
+          name="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handleChange}
+          required
         />
 
-        <br /><br />
-
-        <button type="submit">Login</button>
+        <button disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: "90vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  card: {
+    width: "320px",
+    padding: "2rem",
+    borderRadius: "8px",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem"
+  },
+  error: { color: "red" }
+};
 
 export default Login;

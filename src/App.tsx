@@ -4,27 +4,31 @@ import Login from "./pages/public/Login";
 import RegisterCompany from "./pages/public/RegisterCompany";
 import Profile from "./pages/common/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
-    <Routes>
-      {/* Public */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register-company" element={<RegisterCompany />} />
+    <>
+      <NavBar />
+      <Routes>
+        {/* Public */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register-company" element={<RegisterCompany />} />
 
-      {/* Protected */}
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/login" />} />
-    </Routes>
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </>
   );
 }
 
