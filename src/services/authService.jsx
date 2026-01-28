@@ -1,7 +1,7 @@
-import { loginApi, registerCompanyApi } from "../api/Authapi";
+import { loginApi, registerApi } from "../api/Authapi";
 
 export async function registerCompany(data) {
-  return await registerCompanyApi(data);
+  return await registerApi(data);
 }
 
 // src/services/authService.jsx

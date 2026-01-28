@@ -21,14 +21,35 @@ function Login() {
     e.preventDefault();
     try {
       const data = await login(formData.email, formData.password); // This now returns response.data
+      // Log response to help debug shape (token, role, user etc.)
+      console.log("Login response:", data.role);
 
-      // Ensure you are checking for the EXACT string from the backend
-    if (data.role === "ROLE_TEAM_MEMBER" || data.role === "ROLE_ADMIN") {
-      navigate("/profile"); 
-    }
+      // Navigate when role matches expected values, or when a token is present.
+      if (
+        data &&
+        (data.role === "ROLE_TEAM_MEMBER" || data.role === "ROLE_ADMIN")
+      ) {
+        navigate("/profile");
+        return;
+      }
+
+      // Some backends return { token, user: { role } } or just { token }
+      if (data && data.token) {
+        navigate("/profile");
+        return;
+      }
+
+      // Fallback: if token was stored by the service, use it as a success indicator
+      if (localStorage.getItem("token")) {
+        navigate("/profile");
+        return;
+      }
+
+      // If we reach here, login succeeded but we couldn't determine a redirect target
+      setError("Login succeeded but role/redirect info was missing.");
   } catch (err) {
-    console.error("Navigation failed:", err);
-    setError("Login successful, but navigation failed.");
+      console.error("Login failed:", err);
+      setError("Login failed. Please check your credentials and try again.");
   }
 };
 
