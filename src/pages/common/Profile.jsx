@@ -1,36 +1,38 @@
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "../../services/userService";
+import { fetchProfile } from "../services/userService";
+import CreateEmployeeModal from "../components/CreateEmployeeModal";
 
 function Profile() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [profile, setProfile] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
-    async function loadProfile() {
-      try {
-        const data = await getCurrentUser();
-        setUser(data);
-      } catch (err) {
-        setError("Failed to load profile");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadProfile();
+    fetchProfile().then(setProfile);
   }, []);
 
-  if (loading) return <p>Loading profile...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (!profile) return <p>Loading...</p>;
+
+  const canCreateEmployee =
+    profile.role === "CEO" ||
+    profile.role === "MANAGER" ||
+    profile.role === "TEAM_LEADER";
 
   return (
     <div>
-      <h2>User Profile</h2>
+      <h2>My Profile</h2>
+      <p><b>Name:</b> {profile.name}</p>
+      <p><b>Email:</b> {profile.email}</p>
+      <p><b>Role:</b> {profile.role}</p>
 
-      <p><strong>Name:</strong> {user.name}</p>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Role:</strong> {user.role}</p>
+      {canCreateEmployee && (
+        <button onClick={() => setShowCreate(true)}>
+          + Create Employee
+        </button>
+      )}
+
+      {showCreate && (
+        <CreateEmployeeModal onClose={() => setShowCreate(false)} />
+      )}
     </div>
   );
 }
