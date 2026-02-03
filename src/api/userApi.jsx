@@ -9,3 +9,7 @@ export async function fetchProfile() {
 export const fetchMyTeam = () => {
   return api.get("/api/users/my-team", { withCredentials: true });
 };
+
+export const createEmployee = (data) => {
+  return api.post("/api/users/add-employee", data);
+};

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { login } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
-
+  const {setUser} = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -23,28 +24,16 @@ function Login() {
       const data = await login(formData.email, formData.password); // This now returns response.data
       // Log response to help debug shape (token, role, user etc.)
       console.log("Login response:", data.role);
-
-      // Navigate when role matches expected values, or when a token is present.
-      if (
-        data &&
-        (data.role === "ROLE_TEAM_MEMBER" || data.role === "ROLE_ADMIN")
-      ) {
-        navigate("/profile");
-        return;
-      }
-
+      setUser(data); // Update user context with logged-in user data
       // Some backends return { token, user: { role } } or just { token }
       if (data && data.token) {
         navigate("/profile");
         return;
       }
-
-      // Fallback: if token was stored by the service, use it as a success indicator
       if (localStorage.getItem("token")) {
         navigate("/profile");
         return;
       }
-
       // If we reach here, login succeeded but we couldn't determine a redirect target
       setError("Login succeeded but role/redirect info was missing.");
   } catch (err) {

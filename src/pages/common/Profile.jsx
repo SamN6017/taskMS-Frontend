@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { fetchProfile } from "../services/userService";
-import CreateEmployeeModal from "../components/CreateEmployeeModal";
+import { getCurrentUser } from "../../services/userService";
+import CreateEmployeeModal from "../../components/CreateEmployeeModal";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
 
   useEffect(() => {
-    fetchProfile().then(setProfile);
+    getCurrentUser().then(setProfile);
   }, []);
 
   if (!profile) return <p>Loading...</p>;

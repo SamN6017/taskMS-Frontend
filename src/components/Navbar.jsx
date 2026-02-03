@@ -2,12 +2,22 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
-  const { isAuthenticated, role, logout } = useAuth();
+  const { isAuthenticated, role, logout, loading } = useAuth(); //
   const navigate = useNavigate();
 
   function handleLogout() {
-    logout();
+    logout(); //
     navigate("/login");
+  }
+
+  // 1. Prevent rendering links while checking session status
+  if (loading) {
+    return (
+      <nav style={styles.nav}>
+        <h3 style={styles.logo}>TaskMS</h3>
+        <div style={styles.spinner}>Loading...</div> 
+      </nav>
+    );
   }
 
   return (
@@ -15,19 +25,20 @@ function Navbar() {
       <h3 style={styles.logo}>TaskMS</h3>
 
       <div style={styles.links}>
-        {!isAuthenticated && (
+        {!isAuthenticated && ( //
           <>
             <Link to="/login">Login</Link>
             <Link to="/register-company">Register Company</Link>
           </>
         )}
 
-        {isAuthenticated && (
+        {isAuthenticated && ( //
           <>
             <Link to="/profile">Profile</Link>
             <Link to="/tasks">Tasks</Link>
 
-            {["CEO", "MANAGER", "TEAM_LEADER"].includes(role) && (
+            {/* Ensure these role strings match your backend exactly (e.g., "ROLE_ADMIN") */}
+            {["CEO", "MANAGER", "TEAM_LEADER", "ROLE_ADMIN"].includes(role) && (
               <Link to="/projects">Projects</Link>
             )}
 
@@ -52,6 +63,11 @@ const styles = {
     display: "flex",
     gap: "1rem",
     alignItems: "center"
+  },
+  spinner: {
+    fontSize: "0.9rem",
+    fontStyle: "italic",
+    opacity: 0.8
   }
 };
 
