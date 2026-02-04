@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
-  const {setUser} = useAuth();
+  const {setUser, refreshUser} = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -27,6 +27,7 @@ function Login() {
       setUser(data); // Update user context with logged-in user data
       // Some backends return { token, user: { role } } or just { token }
       if (data && data.token) {
+        await refreshUser();
         navigate("/profile");
         return;
       }

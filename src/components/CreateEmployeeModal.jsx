@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { createEmployee } from "../api/userApi";
+import { useAuth } from "../context/AuthContext";
 
 function CreateEmployeeModal({ onClose }) {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "TEAM_MEMBER",
-    reportsToId: ""
-  });
+  const { user } = useAuth(); // Get currently logged-in manager
+
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: "",
+  role: "TEAM_MEMBER",
+  reportsToEmail: user?.email // Auto-assign the current user as the boss
+});
 
   function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
@@ -41,10 +44,11 @@ function CreateEmployeeModal({ onClose }) {
         </select>
 
         <input
-          name="reportsToId"
-          placeholder="Reports To (User ID)"
+          type="email"
+          name="reportsToEmail" // Must match the key in formData
+          value={formData.reportsToEmail}
           onChange={handleChange}
-          required
+          placeholder="Supervisor Email"
         />
 
         <button type="submit">Create</button>
