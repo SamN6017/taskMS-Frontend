@@ -20,7 +20,7 @@ const [formData, setFormData] = useState({
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await createEmployee(form);
+      await createEmployee(formData);
       alert("Employee created successfully");
       onClose();
     } catch (err) {

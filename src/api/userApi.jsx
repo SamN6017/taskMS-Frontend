@@ -11,5 +11,6 @@ export const fetchMyTeam = () => {
 };
 
 export const createEmployee = (data) => {
+  console.log("Creating employee with data:", data);
   return api.post("/api/users/add-employee", data);
 };
